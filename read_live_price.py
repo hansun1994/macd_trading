@@ -9,9 +9,28 @@ from yahoo_fin import stock_info as si
 import numpy as np
 import pandas as pd
 
-def read_live_price(tickers):
+def read_live_price_all(tickers):
     live_px = []
     for ticker in tickers:
-        live_px.append(si.get_live_price(ticker))
+        result = None
+        while result is None:
+            try:
+                result = si.get_live_price(ticker)
+                live_px.append(result)
+            except:
+                pass
+        
         
     return live_px
+
+def read_live_price_single(ticker):
+    
+    result = None
+    
+    while result is None:
+        try:
+            result = si.get_live_price(ticker)
+        except:
+            pass
+    
+    return result
