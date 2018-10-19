@@ -13,9 +13,10 @@ import time
 #from yahoo_fin import stock_info as si
 
 #%% set porfolio from yesterday
-#portfolio = pd.read_csv('H:/Private/trading/macd_trading/portfolio_20181009.csv')
-portfolio = pd.read_csv('D:/Trading/macd_trading/portfolio_20181009.csv')
-parameter = pd.read_csv('D:/Trading/macd_trading/parameter.csv', index_col = 0)
+portfolio = pd.read_csv('H:/Private/trading/macd_trading/portfolio_20181009.csv')
+#portfolio = pd.read_csv('D:/Trading/macd_trading/portfolio_20181009.csv')
+#parameter = pd.read_csv('D:/Trading/macd_trading/parameter.csv', index_col = 0)
+parameter = pd.read_csv('H:/Private/trading/macd_trading/parameter.csv', index_col = 0)
 tickers = list(parameter.index)
             
 #%%
@@ -28,7 +29,7 @@ money = {}
 
 open_time = datetime.datetime.now().replace(hour=9, minute=30, second=0, microsecond=0)
 trade_start = datetime.datetime.now().replace(hour=9, minute=45, second=0, microsecond=0)
-trade_close = datetime.datetime.now().replace(hour=23, minute=50, second=0, microsecond=0)
+trade_close = datetime.datetime.now().replace(hour=15, minute=50, second=0, microsecond=0)
 
 for ticker in tickers:
     money[ticker] = float(portfolio[ticker])
@@ -133,7 +134,7 @@ while datetime.datetime.now() >= open_time:
         break
     
 print(money)
-portfolio_return = round((sum(money.values())-sum(float(portfolio.sum(1))))*100/float(portfolio.sum(1)),2)
+portfolio_return = round((sum(money.values())-float(portfolio.sum(1)))*100/float(portfolio.sum(1)),2)
 print('Daily portfolio return: ' + str(portfolio_return)+'%')
 
 daily_return = {}
@@ -147,9 +148,9 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
-ticker = 'AAPL'
+ticker = 'AMD'
 
-points = np.array([range(370), price_table[ticker]]).T.reshape(-1, 1, 2)
+points = np.array([range(len(price_table)), price_table[ticker]]).T.reshape(-1, 1, 2)
 segments = np.concatenate([points[:-1], points[1:]], axis=1)
 
 cmap = ListedColormap(['r', 'g'])
@@ -161,7 +162,7 @@ lc.set_linewidth(2)
 fig = plt.figure()
 plt.gca().add_collection(lc)
 
-plt.xlim(0, 369)
+plt.xlim(0, len(price_table)-1)
 plt.ylim(price_table[ticker].min(), price_table[ticker].max())
 plt.legend('Daily Return: ' + str(daily_return[ticker])+'%', loc = 'upper left')
 plt.show()
